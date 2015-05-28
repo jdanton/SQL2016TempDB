@@ -1,0 +1,10 @@
+$cores=Get-WmiObject –class Win32_processor | ft systemname,Name,DeviceID,NumberOfCores,NumberOfLogicalProcessors, Addresswidth
+
+$icores=$cores -as [int]
+
+
+if ($icores -lt 8) {$tempdbfiles=4}
+elseif ($icores -eq 8) {$tempdbfiles=8}
+elseif ($icores -gt 8) {$tempdbfiles=8}
+
+(gc C:\temp\ConfigurationFile2016.ini)|foreach-object {$_ -replace  'TDBVAR', "$tempdbfiles"}|out-file C:\temp\ConfigurationFile2016.ini
